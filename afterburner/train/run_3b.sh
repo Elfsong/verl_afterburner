@@ -17,7 +17,7 @@ python3 -m verl.trainer.main_ppo \
     data.max_response_length=8192 \
     data.filter_overlong_prompts=True \
     data.truncation='error' \
-    custom_reward_function.path=/home/nus_cisco_wp1/Projects/verl/afterburner/reward_function/afterburner_rf.py\
+    custom_reward_function.path=/home/nus_cisco_wp1/Projects/verl_afterburner/afterburner/reward_function/afterburner_reward_function.py\
     custom_reward_function.name=afterburner_reward_fn_batch \
     reward_model.reward_manager="batch"\
     actor_rollout_ref.model.path=Elfsong/Qwen2.5-Coder-3B-Venus-Cold-Start \

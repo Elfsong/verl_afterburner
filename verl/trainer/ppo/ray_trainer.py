@@ -905,13 +905,17 @@ class RayPPOTrainer:
 
                 with _timer("step", timing_raw):
                     # generate a batch
+                    print(f"[+] Batch Input <- {gen_batch.batch['input_ids'].shape}")
                     with _timer("gen", timing_raw):
                         if not self.async_rollout_mode:
+                            print('[+] Rollout Mode: Sync')
                             gen_batch_output = self.actor_rollout_wg.generate_sequences(gen_batch)
                         else:
+                            print('[+] Rollout Mode: Async')
                             self.async_rollout_manager.wake_up()
                             gen_batch_output = self.async_rollout_manager.generate_sequences(gen_batch)
                             self.async_rollout_manager.sleep()
+                    
 
                     if self.config.algorithm.adv_estimator == AdvantageEstimator.REMAX:
                         with _timer("gen_max", timing_raw):
@@ -933,6 +937,8 @@ class RayPPOTrainer:
                     # repeat to align with repeated responses in rollout
                     batch = batch.repeat(repeat_times=self.config.actor_rollout_ref.rollout.n, interleave=True)
                     batch = batch.union(gen_batch_output)
+                    
+                    print(f"[+] Batch Output -> {batch.batch['input_ids'].shape}")
 
                     batch.batch["response_mask"] = compute_response_mask(batch)
                     # balance the number of valid tokens on each dp rank.

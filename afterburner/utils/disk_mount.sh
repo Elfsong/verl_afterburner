@@ -5,7 +5,7 @@ echo '[+] unmount disks'
 sudo umount /mnt/lucky_space
 
 echo '[+] create RAID array'
-sudo mdadm --create /dev/md0 --level=0 --raid-devices=8  /dev/disk/by-id/google-local-nvme-ssd-*
+sudo mdadm --create /dev/md0 --level=0 --raid-devices=4  /dev/disk/by-id/google-local-nvme-ssd-*
 
 echo '[+] format RAID array'
 sudo mkfs.ext4 -F /dev/md0
@@ -22,6 +22,5 @@ sudo chmod a+w /mnt/lucky_space
 echo '[+] set HF environments'
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export HF_HOME=/mnt/lucky_space/
-export HF_TOKEN=HF_TOKEN
 
 echo '[+] Done'
